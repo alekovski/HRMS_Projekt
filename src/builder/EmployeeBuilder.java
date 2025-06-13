@@ -1,10 +1,14 @@
 package builder;
 
 import model.Department;
-import model.EmployeeRole;
 import model.Employee;
+import model.EmployeeRole;
 import factory.EmployeeFactory;
 
+/**
+ * EmployeeBuilder class: This class helps to create Employee objects step-by-step.
+ * It's part of the "Builder" design pattern, which makes object creation more flexible and readable.
+ */
 public class EmployeeBuilder {
     private String id;
     private String firstName;
@@ -13,74 +17,112 @@ public class EmployeeBuilder {
     private EmployeeRole role;
     private String employeeType;
     private Employee manager;
-    private Double param1;
-    private Double param2;
+    private Double baseSalary;
+    private Double hourlyRate;
+    private Double hoursWorked;
 
+    /**
+     * Default constructor for EmployeeBuilder.
+     * Initializes a new builder instance.
+     */
     public EmployeeBuilder() {
+        // Default constructor
     }
 
+    /**
+     * Sets the employee's ID.
+     */
     public EmployeeBuilder setId(String id) {
         this.id = id;
         return this;
     }
 
+    /**
+     * Sets the employee's first name.
+     */
     public EmployeeBuilder setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
 
+    /**
+     * Sets the employee's last name.
+     */
     public EmployeeBuilder setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
 
+    /**
+     * Sets the employee's department.
+     */
     public EmployeeBuilder setDepartment(Department department) {
         this.department = department;
         return this;
     }
 
+    /**
+     * Sets the employee's role.
+     */
     public EmployeeBuilder setRole(EmployeeRole role) {
         this.role = role;
         return this;
     }
 
-    public EmployeeBuilder setEmployeeType(String employeeType) { // Метод для встановлення типу для Factory
+    /**
+     * Sets the type of employee (e.g., "FULLTIME", "PARTTIME").
+     * This helps the builder decide which type of employee to create.
+     */
+    public EmployeeBuilder setEmployeeType(String employeeType) {
         this.employeeType = employeeType;
         return this;
     }
 
-    public EmployeeBuilder setManager(Employee manager) { // Новий сеттер для менеджера
+    /**
+     * Sets the employee's manager.
+     */
+    public EmployeeBuilder setManager(Employee manager) {
         this.manager = manager;
         return this;
     }
 
-    public EmployeeBuilder setParam1(Double param1) {
-        this.param1 = param1;
+    /**
+     * Sets the base salary for a FullTimeEmployee.
+     * This method should only be used if the employee type is "FULLTIME".
+     */
+    public EmployeeBuilder setBaseSalary(Double baseSalary) {
+        this.baseSalary = baseSalary;
         return this;
     }
 
-    public EmployeeBuilder setParam2(Double param2) {
-        this.param2 = param2;
+    /**
+     * Sets the hourly rate and hours worked for a PartTimeEmployee.
+     * This method should only be used if the employee type is "PARTTIME".
+     */
+    public EmployeeBuilder setHourlyRateAndHours(Double hourlyRate, Double hoursWorked) {
+        this.hourlyRate = hourlyRate;
+        this.hoursWorked = hoursWorked;
         return this;
     }
 
+    /**
+     * Builds and returns the Employee object based on the set attributes.
+     * It uses the EmployeeFactory to create the correct type of employee.
+     */
     public Employee build() {
-        // Перевіряємо тип співробітника та викликаємо Factory з відповідними параметрами
         if ("FULLTIME".equalsIgnoreCase(employeeType)) {
-            if (param1 == null) {
-                throw new IllegalStateException("FullTimeEmployee requires base salary (param1) to be set.");
+            if (baseSalary == null) {
+                throw new IllegalStateException("For FullTimeEmployee, the base salary must be specified.");
             }
-            return EmployeeFactory.createEmployee(employeeType, id, firstName, lastName, department, role, manager, param1);
+            return EmployeeFactory.createFullTimeEmployee(id, firstName, lastName, department, role, manager, baseSalary);
         } else if ("PARTTIME".equalsIgnoreCase(employeeType)) {
-            if (param1 == null || param2 == null) {
-                throw new IllegalStateException("PartTimeEmployee requires hourly rate (param1) and hours worked (param2) to be set.");
+            if (hourlyRate == null || hoursWorked == null) {
+                throw new IllegalStateException("For PartTimeEmployee, the hourly rate and hours worked must be specified.");
             }
-            return EmployeeFactory.createEmployee(employeeType, id, firstName, lastName, department, role, manager, param1, param2);
+            return EmployeeFactory.createPartTimeEmployee(id, firstName, lastName, department, role, manager, hourlyRate, hoursWorked);
         } else {
-            // Для інших типів або базових, якщо вони не вимагають дод. параметрів
-            // Якщо Factory.createEmployee без додаткових параметрів існує, використовуйте його.
-            // Наразі, наш Factory завжди очікує хоча б один додатковий параметр.
-            throw new IllegalArgumentException("Unknown or unsupported employee type for builder: " + employeeType);
+            // If the employee type is not recognized or supported
+            throw new IllegalArgumentException("Unknown or unsupported employee type for the builder: " + employeeType); // English
         }
     }
 }
