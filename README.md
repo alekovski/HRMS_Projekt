@@ -14,4 +14,4 @@ A simple console-based Human Resources Management System (HRMS) to demonstrate O
 - **Builder:** For constructing complex employee objects.
 - **Strategy:** For different salary calculation methods and employee sorting.
 - **Observer:** For sending notifications about employee lifecycle events.
-- **Recursion:** (Optional) For traversing organizational hierarchy.
+- **Recursion:** For traversing organizational hierarchy.
