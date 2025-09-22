@@ -8,7 +8,7 @@ A simple console-based Human Resources Management System (HRMS) to demonstrate O
 - Employee search and sorting.
 - Notifications for new hires.
 
-## Design Patterns Used:
+## Design Patterns:
 - **Singleton:** For managing the main HR system.
 - **Factory Method:** For creating different types of employees.
 - **Builder:** For constructing complex employee objects.
