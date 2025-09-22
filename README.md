@@ -1,4 +1,4 @@
-# HRMSProject
+# HRMS_Project
 
 A simple console-based Human Resources Management System (HRMS) to demonstrate Object-Oriented Programming (OOP) principles and various design patterns.
 
